@@ -12,7 +12,7 @@ class Dashboard:
         themes extracted from assets directory
         """
 
-        self.app: Dash = Dash(external_stylesheets=[dbc.themes.SLATE])
+        self.app: Dash = Dash(assets_folder="../assets")
         self.app.layout = app_layout()
 
     def start(self) -> None:
