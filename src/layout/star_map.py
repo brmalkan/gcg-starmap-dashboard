@@ -1,7 +1,6 @@
 from dash import dash_table, dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
-import pandas as pd
 
 CARD_HEIGHT = "87vh"
 
@@ -51,17 +50,62 @@ def draw_config_box() -> html.Div:
                                 "color": "white"
                             }
                         ),
-                        html.P("Root Data Directory"),
-                        html.P("Orbit Data File"),
 
-                        html.P("Range (arcseconds)"),
-                        html.P("Center (x, y)"),
+                        html.Div([
+                            html.H6("Root Data Directory"),
+                            dcc.Input(
+                                type="text",
+                                id="data_filepath"
+                            )
+                        ]),
 
-                        html.P("Enable Names"),
-                        html.P("Enable Orbits"),
+                        html.Div([
+                            html.H6("Orbit Data File"),
+                            dcc.Input(
+                                type="text",
+                                id="orbit_filepath"
+                            )
+                        ]),
 
-                        html.P("Load Data"),
-                        html.P("Search Star")
+                        html.Div([
+                            html.H6("Range (arcseconds)"),
+                            dcc.Input(
+                                type="number",
+                                id="map_range"
+                            )
+                        ]),
+
+                        html.Div([
+                            html.H6("Center Point"),
+                            dbc.Row([
+                                dbc.Col([
+                                    dcc.Input(
+                                        value=0, type="number", id="map_center_x"
+                                    ),
+                                    html.Label("x (arcseconds)")
+                                ]),
+                                dbc.Col([
+                                    dcc.Input(
+                                        value=0, type="number", id="map_center_y"
+                                    ),
+                                    html.Label("y (arcseconds)")
+                                ]),
+                            ])
+                        ]),
+
+                        dcc.RadioItems(
+                            options=[
+                                "Enable Names",
+                                "Enale Orbits"
+                            ],
+                            id="map_radio_options"
+                        ),
+
+                        dbc.Button(
+                            "Refresh Map",
+                            id="refresh_button",
+                            color="info"
+                        )
                     ],
                     gap=4
                 )
@@ -90,6 +134,13 @@ def draw_neighbor_table() -> html.Div:
                                     "color": "white"
                                 }
                             ),
+                            html.Div([
+                                html.H6(children="Select Reference Star"),
+                                dcc.Dropdown(
+                                    options=['NYC', 'MTL', 'SF'],
+                                    value='NYC'
+                                )
+                            ]),
                             dash_table.DataTable(
                                 columns=[
                                     {"name": "Star", "id": "star"},
@@ -152,17 +203,44 @@ def EXAMPLE():
     return  html.Div([
         dbc.Card(
             dbc.CardBody([
-                dcc.Graph(
-                    figure=px.bar(
-                        px.data.iris(), x="sepal_width", y="sepal_length", color="species"
-                    ).update_layout(
-                        template='plotly_dark',
-                        plot_bgcolor= 'rgba(0, 0, 0, 0)',
-                        paper_bgcolor= 'rgba(0, 0, 0, 0)',
-                    ),
-                    config={
-                        'displayModeBar': False
-                    }
+                dbc.Stack(
+                    [
+                        dcc.Graph(
+                            figure=px.bar(
+                                px.data.iris(),
+                                x="sepal_width",
+                                y="sepal_length",
+                                color="species"
+                            ).update_layout(
+                                template='plotly_dark',
+                                plot_bgcolor= 'rgba(0, 0, 0, 0)',
+                                paper_bgcolor= 'rgba(0, 0, 0, 255)',
+                            ),
+                            id="star_map_2d",
+                            config={
+                                'displayModeBar': False
+                            }
+                        ),
+                        dcc.Graph(
+                            figure=px.scatter_3d(
+                                px.data.iris(),
+                                x='sepal_length',
+                                y='sepal_width',
+                                z='petal_width',
+                                color="species",
+                                hover_data=['petal_width'],
+                            ).update_layout(
+                                template='plotly_dark',
+                                plot_bgcolor= 'rgba(0, 0, 0, 0)',
+                                paper_bgcolor= 'rgba(0, 0, 0, 255)',
+                            ),
+                            id="star_map_3d",
+                            config={
+                                'displayModeBar': False
+                            }
+                        )
+                    ],
+                    gap=0
                 )
             ]),
             color="dark",
