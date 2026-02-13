@@ -57,6 +57,15 @@ class Dashboard:
             if enable_orbits:
                 self.orbit_data = load_orbits(orbit_filepath)
 
+            hover_text = [
+                f"Name: {name}<br>X: {x}<br>Y: {y}<br>Mag: {mag}"
+                for name, x, y, mag in zip(
+                    self.star_data['name'],
+                    self.star_data['x'],
+                    self.star_data['y'],
+                    self.star_data['mag']
+                )
+            ]
             marker_size = [
                 np.exp(-(mag-19.0)/2.5)*10.0
                 for mag in self.star_data['mag']
@@ -88,6 +97,8 @@ class Dashboard:
                         "color": "grey",
                         "family": "Times New Roman"
                     },
+                    hovertext=hover_text,
+                    hoverinfo="text",
                     marker={
                         "size": marker_size,
                         "color": marker_color,
@@ -143,7 +154,8 @@ class Dashboard:
                             y=orbit[:, 1],
                             mode="lines",
                             opacity=0.4,
-                            name=name
+                            hovertext=name,
+                            hoverinfo="text"
                         )
                     )
 
