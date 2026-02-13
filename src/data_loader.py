@@ -105,7 +105,7 @@ def find_neighbor_stars(
             {"star": name, "distance": round(dist, 5)}
         )
         i += 1
-        if i >= 100:
+        if i >= 250:
             break
 
     return table_data

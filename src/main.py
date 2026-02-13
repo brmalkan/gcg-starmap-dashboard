@@ -1,4 +1,4 @@
-from dashboard import Dashboard
+from app import Dashboard
 
 def main():
     dashboard = Dashboard()

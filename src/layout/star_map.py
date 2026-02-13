@@ -86,6 +86,7 @@ def draw_config_box() -> html.Div:
                                 dbc.Col([
                                     dcc.Input(
                                         value=0,
+                                        step=0.1,
                                         type="number",
                                         id="map_center_x"
                                     ),
@@ -94,6 +95,7 @@ def draw_config_box() -> html.Div:
                                 dbc.Col([
                                     dcc.Input(
                                         value=0,
+                                        step=0.1,
                                         type="number",
                                         id="map_center_y"
                                     ),
@@ -193,6 +195,9 @@ def draw_neighbor_table() -> html.Div:
                                 },
                                 style_cell={
                                     "textAlign": "center"
+                                },
+                                style_table={
+                                    "height": "50vh"
                                 }
                             )
                         ],
